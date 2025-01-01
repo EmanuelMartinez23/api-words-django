@@ -13,37 +13,61 @@ def available_language(value):
         raise serializers.ValidationError("Language is not available")
 
 
-class WordSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    word = serializers.CharField(required=True)
-    language = serializers.CharField(required=True, validators= [available_language])
-    theme = serializers.CharField(required=True)
-    date_joined = serializers.DateField()
+# class WordSerializer(serializers.Serializer):
+#     id = serializers.IntegerField(read_only=True)
+#     word = serializers.CharField(required=True)
+#     language = serializers.CharField(required=True, validators= [available_language])
+#     theme = serializers.CharField(required=True)
+#     date_joined = serializers.DateField(default = datetime.today())
+#
+#     def create(self, validated_data):
+#         return Word.objects.create(**validated_data)
+#
+#     def update(self, instance, validated_data):
+#         instance.word = validated_data.get('word', instance.word)
+#         instance.language = validated_data.get('language', instance.language)
+#         instance.theme = validated_data.get('theme', instance.theme)
+#         instance.date_joined = validated_data.get('date_joined', instance.date_joined)
+#         instance.save()
+#         return instance
+#
+#     # Fields Validation
+#
+#     # Field-Level validation
+#     # validate language field
+#     # def validate_language(self,value):
+#     #     # if the length of the language field is not 2, throw an exception
+#     #     if len(value) != 2:
+#     #         raise serializers.ValidationError('The length of the language field is not 2.')
+#
+#     # Object-Level validation
+#     def validate(self, data):
+#         # validation
+#         if not ( str.isalpha(str(data['word']))  and  str.isalpha(str(data['theme']))):
+#             raise serializers.ValidationError("The fields cannot contain numbers.")
+#         return data
 
-    def create(self, validated_data):
-        return Word.objects.create(**validated_data)
 
-    def update(self, instance, validated_data):
-        instance.word = validated_data.get('word', instance.word)
-        instance.language = validated_data.get('language', instance.language)
-        instance.theme = validated_data.get('theme', instance.theme)
-        instance.date_joined = validated_data.get('date_joined', instance.date_joined)
-        instance.save()
-        return instance
+class WordSerializer(serializers.ModelSerializer):
+    # custom serializer field
+    size = serializers.SerializerMethodField()
+    # override language field because need to implement validators
+    language = serializers.CharField(required=True, validators=[available_language])
 
-    # Fields Validation
+    class Meta:
+        model = Word
+        fields = "__all__"
+        # exclude any fields
+        # exclude = ['date_joined']
 
-    # Field-Level validation
-    # validate language field
-    # def validate_language(self,value):
-    #     # if the length of the language field is not 2, throw an exception
-    #     if len(value) != 2:
-    #         raise serializers.ValidationError('The length of the language field is not 2.')
-
-    # Object-Level validation
     def validate(self, data):
         # validation
         if not ( str.isalpha(str(data['word']))  and  str.isalpha(str(data['theme']))):
             raise serializers.ValidationError("The fields cannot contain numbers.")
         return data
+
+    # custom serializer field method
+    # structure  get_name_field
+    def get_size(self,obj):
+        return len(obj.word)
 
