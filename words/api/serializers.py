@@ -1,7 +1,8 @@
 from datetime import timezone, datetime
 
 from rest_framework import serializers
-from ..models  import Word
+from ..models import Word, Theme
+
 
 # Validators
 def available_language(value):
@@ -52,7 +53,7 @@ class WordSerializer(serializers.ModelSerializer):
     # custom serializer field
     size = serializers.SerializerMethodField()
     # override language field because need to implement validators
-    language = serializers.CharField(required=True, validators=[available_language])
+
 
     class Meta:
         model = Word
@@ -71,3 +72,20 @@ class WordSerializer(serializers.ModelSerializer):
     def get_size(self,obj):
         return len(obj.word)
 
+
+
+# class ThemeSerializer(serializers.ModelSerializer):
+class ThemeSerializer(serializers.HyperlinkedModelSerializer):
+    wordlist = WordSerializer(many = True, read_only=True)
+    # wordlist = serializers.HyperlinkedRelatedField(
+    #     many = True,
+    #     read_only= True,
+    #     view_name= 'theme-details'
+    # )
+    language = serializers.CharField(required=True, validators=[available_language])
+    class Meta:
+        model = Theme
+        fields = "__all__"
+        extra_kwargs = {
+            'url': {'view_name': 'theme-details'}
+        }

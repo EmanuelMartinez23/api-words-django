@@ -1,12 +1,14 @@
-
+from django.core.serializers import serialize
+from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_204_NO_CONTENT, \
     HTTP_404_NOT_FOUND
 from rest_framework.views import APIView
 
-from .serializers import WordSerializer
-from ..models import Word
+from .serializers import WordSerializer, ThemeSerializer
+from ..models import Word, Theme
+
 
 @api_view(['GET', 'POST'])
 def word_list(request):
@@ -22,8 +24,6 @@ def word_list(request):
             return Response(data = serializer.data, status = HTTP_201_CREATED)
         else:
             return Response(data = serializer.errors,status = HTTP_400_BAD_REQUEST)
-
-
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def word_details(request, pk):
@@ -116,3 +116,40 @@ class word_detailsAV(APIView):
 
         word.delete()
         return Response(status=HTTP_204_NO_CONTENT)
+
+
+# # Views with APIView
+class Theme_ListAV(APIView):
+    def get(self, request):
+        themes =  Theme.objects.all()
+        serializer = ThemeSerializer(themes, many = True,  context={'request': request})
+        return Response(data =serializer.data)
+
+    def post(self,request):
+        serializer = ThemeSerializer(data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(data = serializer.data, status = HTTP_201_CREATED)
+        else:
+            return Response(data = serializer.errors, status = HTTP_400_BAD_REQUEST)
+
+
+class Theme_DetailAV(APIView):
+    def get(self,request, pk):
+        theme = Theme.objects.get(pk = pk)
+        serializer = ThemeSerializer(theme, context={'request': request})
+        return Response(serializer.data, status = HTTP_200_OK)
+
+    def delete(self,request, pk):
+        theme = Theme.objects.get(pk = pk)
+        theme.delete()
+        return  Response(status = HTTP_200_OK)
+
+    def put(self, request, pk):
+        theme = Theme.objects.get(pk = pk)
+        serializer = ThemeSerializer(theme, request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status = HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status = HTTP_400_BAD_REQUEST)
