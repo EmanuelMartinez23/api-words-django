@@ -11,15 +11,9 @@ class Language(models.Model):
 
 
 class Theme(models.Model):
-    LANGUAGE = {
-        "en": "English",
-        "es": "Spanish",
-        "it": "Italian"
-
-    }
     theme = models.CharField(max_length=30, default='Unknown')
     children = models.BooleanField(default=True)
-    language = models.CharField(max_length=2, choices=LANGUAGE,default= LANGUAGE.get("es"))
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.theme
@@ -30,6 +24,7 @@ class Word(models.Model):
     # date_joined = models.DateField(db_default= Now())
     date_joined = models.DateTimeField(auto_now_add= True)
     theme = models.ForeignKey(Theme, on_delete=models.CASCADE, related_name="wordlist")
+    language = models.ForeignKey(Language, on_delete = models.CASCADE, related_name= "language_word")
 
     # toString
     def __str__(self):

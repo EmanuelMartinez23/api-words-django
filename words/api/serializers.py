@@ -48,29 +48,22 @@ def available_language(value):
 #             raise serializers.ValidationError("The fields cannot contain numbers.")
 #         return data
 
-# Serializer for Language
-class LanguageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Language
-        fields = '__all__'
-
 class WordSerializer(serializers.ModelSerializer):
     # custom serializer field
     size = serializers.SerializerMethodField()
     # override language field because need to implement validators
-
 
     class Meta:
         model = Word
         fields = "__all__"
         # exclude any fields
         # exclude = ['date_joined']
-
-    def validate(self, data):
-        # validation
-        if not ( str.isalpha(str(data['word']))  and  str.isalpha(str(data['theme']))):
-            raise serializers.ValidationError("The fields cannot contain numbers.")
-        return data
+    #
+    # def validate(self, data):
+    #     # validation
+    #     if not ( str.isalpha(str(data['word']))  and  str.isalpha(str(data['theme']))):
+    #         raise serializers.ValidationError("The fields cannot contain numbers.")
+    #     return data
 
     # custom serializer field method
     # structure  get_name_field
@@ -82,15 +75,16 @@ class WordSerializer(serializers.ModelSerializer):
 # class ThemeSerializer(serializers.ModelSerializer):
 class ThemeSerializer(serializers.HyperlinkedModelSerializer):
     wordlist = WordSerializer(many = True, read_only=True)
-    # wordlist = serializers.HyperlinkedRelatedField(
-    #     many = True,
-    #     read_only= True,
-    #     view_name= 'theme-details'
-    # )
-    language = serializers.CharField(required=True, validators=[available_language])
+
     class Meta:
         model = Theme
         fields = "__all__"
-        extra_kwargs = {
-            'url': {'view_name': 'theme-details'}
-        }
+        # extra_kwargs = {
+        #     'url': {'view_name': 'theme-details'}
+        # }
+
+# Serializer for Language
+class LanguageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Language
+        fields = "__all__"

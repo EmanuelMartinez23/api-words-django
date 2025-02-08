@@ -207,3 +207,27 @@ class ThemeList(generics.ListCreateAPIView, generics.GenericAPIView):
 class ThemeDetail(generics.RetrieveUpdateDestroyAPIView, generics.GenericAPIView):
     queryset = Theme.objects.all()
     serializer_class = ThemeSerializer
+
+# themes/<int:pk>/words
+class WordsByTheme(generics.ListAPIView):
+    serializer_class = WordSerializer
+
+    def get_queryset(self):
+        pk = self.kwargs['pk']
+        return Word.objects.filter(theme = pk)
+
+# languages/{lang_id}/words
+class WordsByLanguage(generics.ListAPIView):
+    serializer_class = WordSerializer
+    def get_queryset(self):
+        pk = self.kwargs['pk']
+        return Word.objects.filter(language = pk)
+
+
+# WordsByThemeAndLanguage
+class WordsByThemeAndLanguage(generics.ListAPIView):
+    serializer_class = WordSerializer
+    def get_queryset(self):
+        theme = self.kwargs['pk']
+        language = self.kwargs['pk2']
+        return Word.objects.filter(theme = theme ).filter(language = language)

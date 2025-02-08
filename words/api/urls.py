@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views import Theme_ListAV, Theme_DetailAV, LanguageList, LanguageDetail, WordList, WordDetail, ThemeList, \
-    ThemeDetail
+    ThemeDetail, WordsByTheme, WordsByLanguage, WordsByThemeAndLanguage
 from ..api.views import word_list, word_details, word_listAV, word_detailsAV
 urlpatterns = [
     # path('', word_list, name = "word-list" ),  # decorator @api_view()
@@ -16,10 +16,14 @@ urlpatterns = [
     path('words/', WordList.as_view(), name = "word-list" ),
     path('words/<int:pk>', WordDetail.as_view(), name = "word-details" ),
     path('themes/', ThemeList.as_view(), name = "theme-list" ),
-    path('themes/<int:pk>', ThemeDetail.as_view(), name = "theme-details" ),
+    path('themes/<int:pk>', ThemeDetail.as_view(), name = "theme-detail" ),
     # With Mixins
     path('languages/', LanguageList.as_view(), name = "language-list" ),
     path('languages/<int:pk>', LanguageDetail.as_view(), name = "language-detail" ),
+    # With Generic APIView
+    path('themes/<int:pk>/words', WordsByTheme.as_view(), name = "Word-by-theme"),
+    path('languages/<int:pk>/words', WordsByLanguage.as_view(), name = "Word-by-language"),
+    path('themes/<int:pk>/languages/<int:pk2>/words', WordsByThemeAndLanguage.as_view(), name = "Word-by-language-theme")
 
 ]
 
