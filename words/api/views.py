@@ -1,13 +1,14 @@
 from django.core.serializers import serialize
 from django.shortcuts import get_object_or_404
+from rest_framework import generics, mixins
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_204_NO_CONTENT, \
     HTTP_404_NOT_FOUND
 from rest_framework.views import APIView
 
-from .serializers import WordSerializer, ThemeSerializer
-from ..models import Word, Theme
+from .serializers import WordSerializer, ThemeSerializer, LanguageSerializer
+from ..models import Word, Theme, Language
 
 
 @api_view(['GET', 'POST'])
@@ -153,3 +154,37 @@ class Theme_DetailAV(APIView):
             return Response(serializer.data, status = HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status = HTTP_400_BAD_REQUEST)
+
+
+# Views with Mixins, POST, GET
+class LanguageList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+    queryset = Language.objects.all()
+    serializer_class = LanguageSerializer
+
+    # method get: use list method (documentation)
+    def get(self,request, *args, **kwargs):
+        return self.list(request, *args,**kwargs)
+
+    # method post: use created method (documentation)
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+# View with mixins, GET, DELETE
+class LanguageDetail(mixins.RetrieveModelMixin,mixins.DestroyModelMixin, mixins.UpdateModelMixin, generics.GenericAPIView):
+    # query_set = Language.objects.all()
+    serializer_class = LanguageSerializer
+
+    def get_queryset(self):
+        # obtain pk for record
+        pk = self.kwargs['pk']
+        return Language.objects.filter(pk = pk)
+
+    def get(self, request, *args,**kwargs):
+        query_set = self.get_queryset()
+        return self.retrieve(request, *args,**kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)

@@ -1,7 +1,7 @@
 from datetime import timezone, datetime
 
 from rest_framework import serializers
-from ..models import Word, Theme
+from ..models import Word, Theme, Language
 
 
 # Validators
@@ -48,6 +48,11 @@ def available_language(value):
 #             raise serializers.ValidationError("The fields cannot contain numbers.")
 #         return data
 
+# Serializer for Language
+class LanguageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Language
+        fields = '__all__'
 
 class WordSerializer(serializers.ModelSerializer):
     # custom serializer field
