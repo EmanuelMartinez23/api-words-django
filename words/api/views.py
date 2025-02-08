@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from .serializers import WordSerializer, ThemeSerializer, LanguageSerializer
 from ..models import Word, Theme, Language
 
-
+# views with decorator @api_view
 @api_view(['GET', 'POST'])
 def word_list(request):
     if request.method == 'GET':
@@ -180,7 +180,6 @@ class LanguageDetail(mixins.RetrieveModelMixin,mixins.DestroyModelMixin, mixins.
         return Language.objects.filter(pk = pk)
 
     def get(self, request, *args,**kwargs):
-        query_set = self.get_queryset()
         return self.retrieve(request, *args,**kwargs)
 
     def delete(self, request, *args, **kwargs):
@@ -188,3 +187,23 @@ class LanguageDetail(mixins.RetrieveModelMixin,mixins.DestroyModelMixin, mixins.
 
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
+
+
+# Views con Generic Api View (Concrent View Class)
+# POST, GET
+class WordList(generics.ListCreateAPIView, generics.GenericAPIView):
+    queryset = Word.objects.all()
+    serializer_class = WordSerializer
+# GET, PUT, DELETE
+class WordDetail(generics.RetrieveUpdateDestroyAPIView, generics.GenericAPIView):
+    queryset = Word.objects.all()
+    serializer_class = WordSerializer
+
+# GET, POST
+class ThemeList(generics.ListCreateAPIView, generics.GenericAPIView):
+    queryset = Theme.objects.all()
+    serializer_class = ThemeSerializer
+
+class ThemeDetail(generics.RetrieveUpdateDestroyAPIView, generics.GenericAPIView):
+    queryset = Theme.objects.all()
+    serializer_class = ThemeSerializer

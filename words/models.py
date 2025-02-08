@@ -27,7 +27,8 @@ class Theme(models.Model):
 
 class Word(models.Model):
     word =  models.CharField(max_length=30)
-    date_joined = models.DateField(db_default= Now())
+    # date_joined = models.DateField(db_default= Now())
+    date_joined = models.DateTimeField(auto_now_add= True)
     theme = models.ForeignKey(Theme, on_delete=models.CASCADE, related_name="wordlist")
 
     # toString
