@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.functions import Now
 
@@ -22,6 +23,7 @@ class Theme(models.Model):
 class Word(models.Model):
     word =  models.CharField(max_length=30)
     # date_joined = models.DateField(db_default= Now())
+    created_by = models.ForeignKey(User, on_delete = models.CASCADE)
     date_joined = models.DateTimeField(auto_now_add= True)
     theme = models.ForeignKey(Theme, on_delete=models.CASCADE, related_name="wordlist")
     language = models.ForeignKey(Language, on_delete = models.CASCADE, related_name= "language_word")

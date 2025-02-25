@@ -1,12 +1,14 @@
 from django.core.serializers import serialize
 from django.shortcuts import get_object_or_404
-from rest_framework import generics, mixins
+from rest_framework import generics, mixins, viewsets
 from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_204_NO_CONTENT, \
     HTTP_404_NOT_FOUND
 from rest_framework.views import APIView
 
+from .permissions import WordUserOrReadOnly
 from .serializers import WordSerializer, ThemeSerializer, LanguageSerializer
 from ..models import Word, Theme, Language
 
@@ -194,10 +196,18 @@ class LanguageDetail(mixins.RetrieveModelMixin,mixins.DestroyModelMixin, mixins.
 class WordList(generics.ListCreateAPIView, generics.GenericAPIView):
     queryset = Word.objects.all()
     serializer_class = WordSerializer
+    permission_classes = [IsAuthenticated]
+
+    # for the user who has created a word
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user)
+
 # GET, PUT, DELETE
 class WordDetail(generics.RetrieveUpdateDestroyAPIView, generics.GenericAPIView):
     queryset = Word.objects.all()
     serializer_class = WordSerializer
+    # add custom permission
+    permission_classes = [WordUserOrReadOnly]
 
 # GET, POST
 class ThemeList(generics.ListCreateAPIView, generics.GenericAPIView):
@@ -208,7 +218,6 @@ class ThemeDetail(generics.RetrieveUpdateDestroyAPIView, generics.GenericAPIView
     queryset = Theme.objects.all()
     serializer_class = ThemeSerializer
 
-# themes/<int:pk>/words
 class WordsByTheme(generics.ListAPIView):
     serializer_class = WordSerializer
 
@@ -216,18 +225,41 @@ class WordsByTheme(generics.ListAPIView):
         pk = self.kwargs['pk']
         return Word.objects.filter(theme = pk)
 
-# languages/{lang_id}/words
 class WordsByLanguage(generics.ListAPIView):
     serializer_class = WordSerializer
     def get_queryset(self):
         pk = self.kwargs['pk']
         return Word.objects.filter(language = pk)
 
-
-# WordsByThemeAndLanguage
 class WordsByThemeAndLanguage(generics.ListAPIView):
     serializer_class = WordSerializer
     def get_queryset(self):
         theme = self.kwargs['pk']
         language = self.kwargs['pk2']
         return Word.objects.filter(theme = theme ).filter(language = language)
+
+# View using ViewSets
+class LanguageVS(viewsets.ViewSet):
+    def list(self, request):
+        queryset = Language.objects.all()
+        serializer = LanguageSerializer(queryset,many = True)
+        return Response(serializer.data)
+    def retrieve(self, request, pk = None):
+        queryset = Language.objects.all()
+        language = get_object_or_404(queryset, pk = pk )
+        serializer = LanguageSerializer(language)
+        return Response(serializer.data)
+
+    def create(self,request):
+        queryset = Language.objects.all()
+        serializer = LanguageSerializer(data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
+
+# View using ModelViewSet  GET, POST, PUT, DELETE
+class LanguageMVS(viewsets.ModelViewSet):
+    queryset = Language.objects.all()
+    serializer_class = LanguageSerializer

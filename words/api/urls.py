@@ -1,8 +1,14 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 
 from .views import Theme_ListAV, Theme_DetailAV, LanguageList, LanguageDetail, WordList, WordDetail, ThemeList, \
-    ThemeDetail, WordsByTheme, WordsByLanguage, WordsByThemeAndLanguage
+    ThemeDetail, WordsByTheme, WordsByLanguage, WordsByThemeAndLanguage, LanguageVS, LanguageMVS
 from ..api.views import word_list, word_details, word_listAV, word_detailsAV
+# Only test viewset and routers
+router = DefaultRouter()
+router.register('languagesVS', LanguageVS, basename = 'languages')
+router.register('languagesMVS', LanguageMVS, basename = 'languagesM')
+
 urlpatterns = [
     # path('', word_list, name = "word-list" ),  # decorator @api_view()
     # path('<int:pk>', word_details, name = "word-details" ),
@@ -23,7 +29,12 @@ urlpatterns = [
     # With Generic APIView
     path('themes/<int:pk>/words', WordsByTheme.as_view(), name = "Word-by-theme"),
     path('languages/<int:pk>/words', WordsByLanguage.as_view(), name = "Word-by-language"),
-    path('themes/<int:pk>/languages/<int:pk2>/words', WordsByThemeAndLanguage.as_view(), name = "Word-by-language-theme")
+    path('themes/<int:pk>/languages/<int:pk2>/words', WordsByThemeAndLanguage.as_view(), name = "Word-by-language-theme"),
+    # With Viewsets and Router,
+    path('', include(router.urls)),
+    # basic auth (temporary)
+    path('api-auth', include('rest_framework.urls')),
+    # path('account/', include('user_app.api.urls'))
 
 ]
 
