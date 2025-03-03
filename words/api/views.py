@@ -197,8 +197,9 @@ class WordList(generics.ListCreateAPIView, generics.GenericAPIView):
     queryset = Word.objects.all()
     serializer_class = WordSerializer
     permission_classes = [IsAuthenticated]
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ['theme__theme', 'created_by__username', 'language__name']
+    search_fields = ['^word']
 
     # for the user who has created a word
     def perform_create(self, serializer):
@@ -215,8 +216,9 @@ class WordDetail(generics.RetrieveUpdateDestroyAPIView, generics.GenericAPIView)
 class ThemeList(generics.ListCreateAPIView, generics.GenericAPIView):
     queryset = Theme.objects.all()
     serializer_class = ThemeSerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ['children']
+    search_fields = ['=theme']
 
 
 class ThemeDetail(generics.RetrieveUpdateDestroyAPIView, generics.GenericAPIView):
