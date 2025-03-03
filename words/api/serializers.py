@@ -17,6 +17,8 @@ class WordSerializer(serializers.ModelSerializer):
     # custom serializer field
     size = serializers.SerializerMethodField()
     created_by = serializers.StringRelatedField(read_only = True)
+    theme = serializers.StringRelatedField(read_only =True)
+    language = serializers.StringRelatedField(read_only=True)
     # override language field because need to implement validators
     class Meta:
         model = Word

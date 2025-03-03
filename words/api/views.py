@@ -1,13 +1,13 @@
 from django.core.serializers import serialize
 from django.shortcuts import get_object_or_404
-from rest_framework import generics, mixins, viewsets
+from rest_framework import generics, mixins, viewsets, filters
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_204_NO_CONTENT, \
     HTTP_404_NOT_FOUND
 from rest_framework.views import APIView
-
+from django_filters.rest_framework import DjangoFilterBackend
 from .permissions import WordUserOrReadOnly
 from .serializers import WordSerializer, ThemeSerializer, LanguageSerializer
 from ..models import Word, Theme, Language
@@ -197,6 +197,8 @@ class WordList(generics.ListCreateAPIView, generics.GenericAPIView):
     queryset = Word.objects.all()
     serializer_class = WordSerializer
     permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['theme__theme', 'created_by__username', 'language__name']
 
     # for the user who has created a word
     def perform_create(self, serializer):
@@ -213,6 +215,9 @@ class WordDetail(generics.RetrieveUpdateDestroyAPIView, generics.GenericAPIView)
 class ThemeList(generics.ListCreateAPIView, generics.GenericAPIView):
     queryset = Theme.objects.all()
     serializer_class = ThemeSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['children']
+
 
 class ThemeDetail(generics.RetrieveUpdateDestroyAPIView, generics.GenericAPIView):
     queryset = Theme.objects.all()

@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'words.apps.WordsConfig',
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
-    'rest_framework_simplejwt.token_blacklist'
+    'rest_framework_simplejwt.token_blacklist',
+    'django_filters'
 ]
 
 MIDDLEWARE = [
@@ -150,11 +151,15 @@ REST_FRAMEWORK = {
         'theme-create': '50/min',
         'theme-update': '15/day',
         'theme-delete': '10/day'
-    }
+    },
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
+
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "ROTATE_REFRESH_TOKENS" :  True, # with refresh token come back two tokens not just one
     "BLACKLIST_AFTER_ROTATION" : True, # save refresh tokens in Blacklist,
