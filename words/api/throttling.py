@@ -1,6 +1,5 @@
 from rest_framework.throttling import UserRateThrottle
 
-# custom throttling
 class WordCreateThrottle(UserRateThrottle):
     scope = 'word-create'
 
