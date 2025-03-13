@@ -1,6 +1,6 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 from .views import  LanguageList, LanguageDetail, WordList, WordDetail, ThemeList, \
     ThemeDetail, WordsByTheme, WordsByLanguage, WordsByThemeAndLanguage
 
@@ -16,6 +16,8 @@ urlpatterns = [
     path('themes/<int:pk>/languages/<int:pk2>/words', WordsByThemeAndLanguage.as_view(), name = "Word-by-language-theme"),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('schema/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
 
 ]
 

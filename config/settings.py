@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
-    'django_filters'
+    'django_filters',
+    'drf_spectacular'
 ]
 
 MIDDLEWARE = [
@@ -158,7 +159,8 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 5
+    'PAGE_SIZE': 5,
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 
 }
 
@@ -169,4 +171,29 @@ SIMPLE_JWT = {
     "ROTATE_REFRESH_TOKENS" :  True, # with refresh token come back two tokens not just one
     "BLACKLIST_AFTER_ROTATION" : True, # save refresh tokens in Blacklist,
     "AUTH_HEADER_TYPES": ("Bearer",),
+}
+
+
+# Spectacular settings
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Words API',
+    'DESCRIPTION': 'API Rest to give a list words by theme and language.',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'CONTACT' : {
+        'name' : 'Developer Emanuel',
+        'email' : 'developeremanuel13@gmail.com',
+        },
+    'SWAGGER_UI_SETTINGS': {
+    'persistAuthorization' : True,
+    'displayRequestDuration' : True,
+    },
+    'SECURITY':[
+        {
+            'type' : 'http',
+            'schema' : 'bearer',
+            'bearerFormat' : 'JWT',
+        },
+    ],
+    # OTHER SETTINGS
 }

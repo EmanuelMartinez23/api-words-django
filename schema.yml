@@ -1,0 +1,902 @@
+openapi: 3.0.3
+info:
+  title: Words API
+  version: 1.0.0
+  description: API Rest to give a list words by theme and language.
+  contact:
+    name: Developer Emanuel
+    email: developeremanuel13@gmail.com
+paths:
+  /api/languages/:
+    get:
+      operationId: api_languages_list
+      description: View to list and create languages
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - type: http
+        schema: bearer
+        bearerFormat: JWT
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedLanguageList'
+          description: ''
+    post:
+      operationId: api_languages_create
+      description: View to list and create languages
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Language'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Language'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Language'
+        required: true
+      security:
+      - jwtAuth: []
+      - type: http
+        schema: bearer
+        bearerFormat: JWT
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Language'
+          description: ''
+  /api/languages/{id}:
+    get:
+      operationId: api_languages_retrieve
+      description: View to retrieve, update and delete a language
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - type: http
+        schema: bearer
+        bearerFormat: JWT
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Language'
+          description: ''
+    put:
+      operationId: api_languages_update
+      description: View to retrieve, update and delete a language
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Language'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Language'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Language'
+        required: true
+      security:
+      - jwtAuth: []
+      - type: http
+        schema: bearer
+        bearerFormat: JWT
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Language'
+          description: ''
+    delete:
+      operationId: api_languages_destroy
+      description: View to retrieve, update and delete a language
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - type: http
+        schema: bearer
+        bearerFormat: JWT
+      responses:
+        '204':
+          description: No response body
+  /api/languages/{id}/words:
+    get:
+      operationId: api_languages_words_list
+      description: View to list words by languages
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - type: http
+        schema: bearer
+        bearerFormat: JWT
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedWordList'
+          description: ''
+  /api/themes/:
+    get:
+      operationId: api_themes_list
+      description: View to list and create themes
+      parameters:
+      - in: query
+        name: children
+        schema:
+          type: boolean
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - type: http
+        schema: bearer
+        bearerFormat: JWT
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedThemeList'
+          description: ''
+    post:
+      operationId: api_themes_create
+      description: View to list and create themes
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Theme'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Theme'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Theme'
+      security:
+      - jwtAuth: []
+      - type: http
+        schema: bearer
+        bearerFormat: JWT
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Theme'
+          description: ''
+  /api/themes/{id}:
+    get:
+      operationId: api_themes_retrieve
+      description: View to retrieve, update and delete a theme
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - type: http
+        schema: bearer
+        bearerFormat: JWT
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Theme'
+          description: ''
+    put:
+      operationId: api_themes_update
+      description: View to retrieve, update and delete a theme
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Theme'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Theme'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Theme'
+      security:
+      - jwtAuth: []
+      - type: http
+        schema: bearer
+        bearerFormat: JWT
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Theme'
+          description: ''
+    patch:
+      operationId: api_themes_partial_update
+      description: View to retrieve, update and delete a theme
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTheme'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTheme'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTheme'
+      security:
+      - jwtAuth: []
+      - type: http
+        schema: bearer
+        bearerFormat: JWT
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Theme'
+          description: ''
+    delete:
+      operationId: api_themes_destroy
+      description: View to retrieve, update and delete a theme
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - type: http
+        schema: bearer
+        bearerFormat: JWT
+      responses:
+        '204':
+          description: No response body
+  /api/themes/{id}/languages/{pk2}/words:
+    get:
+      operationId: api_themes_languages_words_list
+      description: View to list words by theme and language
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: path
+        name: pk2
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - type: http
+        schema: bearer
+        bearerFormat: JWT
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedWordList'
+          description: ''
+  /api/themes/{id}/words:
+    get:
+      operationId: api_themes_words_list
+      description: View to list words by theme
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - type: http
+        schema: bearer
+        bearerFormat: JWT
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedWordList'
+          description: ''
+  /api/token/:
+    post:
+      operationId: api_token_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+        required: true
+      security:
+      - type: http
+        schema: bearer
+        bearerFormat: JWT
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
+  /api/token/refresh/:
+    post:
+      operationId: api_token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+        required: true
+      security:
+      - type: http
+        schema: bearer
+        bearerFormat: JWT
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /api/words/:
+    get:
+      operationId: api_words_list
+      description: View to list and create words
+      parameters:
+      - in: query
+        name: created_by__username
+        schema:
+          type: string
+      - in: query
+        name: language__name
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: theme__theme
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - type: http
+        schema: bearer
+        bearerFormat: JWT
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedWordList'
+          description: ''
+    post:
+      operationId: api_words_create
+      description: View to list and create words
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Word'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Word'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Word'
+        required: true
+      security:
+      - jwtAuth: []
+      - type: http
+        schema: bearer
+        bearerFormat: JWT
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Word'
+          description: ''
+  /api/words/{id}:
+    get:
+      operationId: api_words_retrieve
+      description: View to retrieve, update and delete a word
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - type: http
+        schema: bearer
+        bearerFormat: JWT
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Word'
+          description: ''
+    put:
+      operationId: api_words_update
+      description: View to retrieve, update and delete a word
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Word'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Word'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Word'
+        required: true
+      security:
+      - jwtAuth: []
+      - type: http
+        schema: bearer
+        bearerFormat: JWT
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Word'
+          description: ''
+    patch:
+      operationId: api_words_partial_update
+      description: View to retrieve, update and delete a word
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedWord'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedWord'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedWord'
+      security:
+      - jwtAuth: []
+      - type: http
+        schema: bearer
+        bearerFormat: JWT
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Word'
+          description: ''
+    delete:
+      operationId: api_words_destroy
+      description: View to retrieve, update and delete a word
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - type: http
+        schema: bearer
+        bearerFormat: JWT
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    Language:
+      type: object
+      description: Serializer for Language model.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        code:
+          type: string
+          maxLength: 10
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - code
+      - created_at
+      - id
+      - name
+    PaginatedLanguageList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Language'
+    PaginatedThemeList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Theme'
+    PaginatedWordList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Word'
+    PatchedTheme:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        wordlist:
+          type: array
+          items:
+            $ref: '#/components/schemas/Word'
+          readOnly: true
+        language_word:
+          type: array
+          items:
+            $ref: '#/components/schemas/Language'
+          readOnly: true
+        theme:
+          type: string
+          maxLength: 30
+        children:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedWord:
+      type: object
+      description: Serializer for Word model.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        size:
+          type: string
+          readOnly: true
+        created_by:
+          type: string
+          readOnly: true
+        theme:
+          type: string
+          readOnly: true
+        language:
+          type: string
+          readOnly: true
+        word:
+          type: string
+          maxLength: 30
+        date_joined:
+          type: string
+          format: date-time
+          readOnly: true
+    Theme:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        wordlist:
+          type: array
+          items:
+            $ref: '#/components/schemas/Word'
+          readOnly: true
+        language_word:
+          type: array
+          items:
+            $ref: '#/components/schemas/Language'
+          readOnly: true
+        theme:
+          type: string
+          maxLength: 30
+        children:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - language_word
+      - url
+      - wordlist
+    TokenObtainPair:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          readOnly: true
+      required:
+      - access
+      - password
+      - refresh
+      - username
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+      required:
+      - access
+      - refresh
+    Word:
+      type: object
+      description: Serializer for Word model.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        size:
+          type: string
+          readOnly: true
+        created_by:
+          type: string
+          readOnly: true
+        theme:
+          type: string
+          readOnly: true
+        language:
+          type: string
+          readOnly: true
+        word:
+          type: string
+          maxLength: 30
+        date_joined:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_by
+      - date_joined
+      - id
+      - language
+      - size
+      - theme
+      - word
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
