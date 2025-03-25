@@ -1,13 +1,30 @@
-# 📚 Documentación de la API Words
+#  API REST Words - Django Rest Framework
 
 ## 📌 Descripción  
-API para gestionar palabras clasificadas por temas y por idioma.
+Esta API permite gestionar palabras, temas e idiomas. Puedes crear, leer, actualizar y eliminar palabras y temas, 
+así como obtener listas de palabras filtradas por idioma y tema.
 
 ## 🛠️ Tecnologías  
 - Django REST Framework (DRF)  
 - PostgreSQL  
-- Token Authentication  
+- Token Authentication (JWT)
 
+--- 
+## 📦 Instalación de dependencias
+Para instalar las dependencias del proyecto, ejecuta el siguiente comando:
+
+```bash
+pip install -r requirements.txt
+```
+## ⚙️ Configuración de Variables de Entorno  
+Este proyecto utiliza variables de entorno para configurar credenciales y opciones sensibles.  
+
+###  Pasos para configurar:  
+1. **Crea un archivo `.env` en la raíz del proyecto.**  
+2. **Usa el archivo `.env.example` como referencia para definir la estructura.**  
+3. **Completa los valores necesarios antes de ejecutar la aplicación.** 
+
+--- 
 ## 📂 Recursos y Endpoints  
 
 ### 🌍 Idiomas  
@@ -47,5 +64,19 @@ Ejemplos:
 
 ---
 ## 🔐 Autenticación  
-La API usa **Token Authentication**. Para autenticarse, enviar el token en los headers:  
+La API usa **Token Authentication** con **JWT** (JSON Web Tokens). Para obtener un token, debes enviar una solicitud `POST` al endpoint `api/token/` con tus credenciales. Luego, puedes usar el token recibido para autenticar tus solicitudes agregándolo en el encabezado `Authorization` con el prefijo `Bearer`.
 
+
+---
+
+## 📖 Documentación de la API  
+
+La API está completamente documentada con **Swagger**. Puedes acceder a la documentación interactiva en el siguiente endpoint:  
+
+🔗 **Swagger UI:** [`/schema/swagger/`](http://127.0.0.1:8000/schema/swagger/)  
+
+También puedes obtener la documentación en formato OpenAPI JSON en:  
+
+🔗 **Esquema OpenAPI:** [`/schema/`](http://127.0.0.1:8000/schema/)  
+
+Esto te permitirá explorar los endpoints, probar solicitudes y ver respuestas en tiempo real.
